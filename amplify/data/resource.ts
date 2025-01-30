@@ -1,35 +1,20 @@
-:root {
-  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
-  line-height: 1.5;
-  font-weight: 400;
+import { type ClientSchema, a, defineData } from '@aws-amplify/backend';
 
-  color: rgba(255, 255, 255, 0.87);
+const schema = a.schema({
+  Note: a
+    .model({
+      name:a.string(),
+      description: a.string(),
+      image: a.string(),
+    })
+    .authorization((allow) => [allow.owner()]),
+});
 
-  font-synthesis: none;
-  text-rendering: optimizeLegibility;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+export type Schema = ClientSchema<typeof schema>;
 
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
-}
-
-.box:nth-child(3n + 1) {
-  grid-column: 1;
-}
-.box:nth-child(3n + 2) {
-  grid-column: 2;
-}
-.box:nth-child(3n + 3) {
-  grid-column: 3;
-}
+export const data = defineData({
+  schema,
+  authorizationModes: {
+    defaultAuthorizationMode: 'userPool',
+  },
+});
